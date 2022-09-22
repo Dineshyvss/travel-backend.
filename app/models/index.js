@@ -14,5 +14,10 @@ const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
 const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
-db.tutorials = require("./tutorial.model.js")(sequelize, Sequelize);
+
+db.tutorial = require("./tutorial.model.js")(sequelize, Sequelize);
+db.lesson = require("./lesson.model.js")(sequelize, Sequelize);
+
+db.tutorial.hasMany(db.lesson, { as: 'lesson' }, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
+db.lesson.belongsTo(db.tutorial, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
 module.exports = db;
