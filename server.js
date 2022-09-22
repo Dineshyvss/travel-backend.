@@ -21,7 +21,10 @@ db.sequelize.sync();
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to bezkoder application." });
 });
+
 require("./app/routes/tutorial.routes")(app);
+require("./app/routes/lesson.routes")(app);
+
 // set port, listen for requests
 const PORT = process.env.PORT || 3003;
 app.listen(PORT, () => {
