@@ -54,7 +54,7 @@ jobs:
                   command: |
                       cd nodeapps/project3/2022
                       npm install
-                      sudo systemctl stop project3-backend
-                      sudo cp project3-backend.service /lib/systemd/system/project3-backend.service
+                      sudo systemctl stop tutorial-backend
+                      sudo cp tutorial-backend.service /lib/systemd/system/tutorial-backend.service
                       sudo systemctl daemon-reload
-                      sudo systemctl start project3-backend
+                      sudo systemctl start tutorial-backend

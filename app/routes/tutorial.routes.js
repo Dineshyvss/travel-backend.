@@ -9,6 +9,9 @@ module.exports = app => {
   // Retrieve all Tutorials
   router.get("/", [authenticate], tutorials.findAll);
 
+  // Retrieve all Tutorials for user
+  router.get("/userTut/:userId", [authenticate], tutorials.findAllForUser);
+
   // Retrieve all published Tutorials
   router.get("/published", [authenticate], tutorials.findAllPublished);
 
@@ -23,6 +26,6 @@ module.exports = app => {
 
   // Delete all Tutorials
   router.delete("/", [authenticate], tutorials.deleteAll);
-  
+
   app.use('/api/tutorials', router);
 };
