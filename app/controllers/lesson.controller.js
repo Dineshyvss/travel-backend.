@@ -50,6 +50,21 @@ exports.findAll = (req, res) => {
       });
     });
 };
+// Retrieve all Lessons for a tutorial from the database.
+exports.findAllForTutorial = (req, res) => {
+  const tutorialId = req.params.tutorialId;
+
+  Lesson.findAll({ where: { tutorialId : tutorialId } })
+  .then(data => {
+    res.send(data);
+  })
+  .catch(err => {
+    res.status(500).send({
+      message:
+        err.message || "Some error occurred while retrieving lessons."
+    });
+  });
+};
 // Find a single Lesson with an id
 exports.findOne = (req, res) => {
   const id = req.params.id;

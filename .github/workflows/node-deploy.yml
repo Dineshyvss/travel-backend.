@@ -1,0 +1,60 @@
+name: AWS DEPLOY TO STAGING
+# turn off deploy to AWS
+
+on:
+   pull_request:
+       types: [closed]
+       branches:
+           - dev
+
+jobs:
+    aws-deploy:
+        runs-on: ubuntu-latest
+        env:
+          DB_HOST: ${{ secrets.AWS_DB_HOST }}
+          DB_PW: ${{ secrets.AWS_DB_PW}}
+          DB_USER: ${{ secrets.AWS_DB_USER }}
+          DB_NAME: ${{ secrets.AWS_DB_NAME }}
+          CLIENT_ID : ${{secrets.CLIENT_ID}} 
+          CLIENT_SECRET : ${{secrets.CLIENT_SECRET}} 
+        steps:
+            - uses: actions/checkout@v2
+              with:
+                  ref: dev
+            - uses: actions/setup-node@v1
+            - run: |
+                    touch .env
+                    echo db_host="$DB_HOST" >> .env
+                    echo db_pw="$DB_PW" >> .env
+                    echo db_user="$DB_USER" >> .env
+                    echo db_name="$DB_NAME" >> .env
+                    echo client_id ="$CLIENT_ID" >> .env
+                    echo client_secret = "$CLIENT_SECRET" >> .env
+                    
+            - run: npm install
+            - run: npm run bundle
+
+            - name: Deploy to Server
+              uses: easingthemes/ssh-deploy@v2.1.1
+              env:
+                  SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_KEY }}
+                  ARGS: '-rltgoDzvO --delete'
+                  SOURCE: 'deploy/'
+                  REMOTE_HOST: 'project3.eaglesoftwareteam.com'
+                  REMOTE_USER: ubuntu
+                  TARGET: 'nodeapps/project3/2022'
+            - name: Execute SSH commmands on remote server
+              uses: JimCronqvist/action-ssh@master
+              env:
+                  NAME: 'Root'
+              with:
+                  hosts: 'ubuntu@project3.eaglesoftwareteam.com'
+                  privateKey: ${{ secrets.SERVER_SSH_KEY }}
+                  debug: false
+                  command: |
+                      cd nodeapps/project3/2022
+                      npm install
+                      sudo systemctl stop tutorial-backend
+                      sudo cp tutorial-backend.service /lib/systemd/system/tutorial-backend.service
+                      sudo systemctl daemon-reload
+                      sudo systemctl start tutorial-backend
