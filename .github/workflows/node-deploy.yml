@@ -26,12 +26,12 @@ jobs:
 
             - run: |
                     touch .env
-                    echo db_host = "$DB_HOST" >> .env
-                    echo db_pw = "$DB_PW" >> .env
-                    echo db_user = "$DB_USER" >> .env
-                    echo db_name = "$DB_NAME" >> .env
-                    echo client_id = "$CLIENT_ID" >> .env
-                    echo client_secret = "$CLIENT_SECRET" >> .env
+                    echo DB_HOST = "$DB_HOST" >> .env
+                    echo DB_PW = "$DB_PW" >> .env
+                    echo DB_USER = "$DB_USER" >> .env
+                    echo DB_NAME = "$DB_NAME" >> .env
+                    echo CLIENT_ID = "$CLIENT_ID" >> .env
+                    echo CLIENT_SECRET = "$CLIENT_SECRET" >> .env
                     
             - run: npm run bundle
 
