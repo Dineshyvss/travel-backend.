@@ -2,45 +2,59 @@ name: AWS DEPLOY TO STAGING
 # turn off deploy to AWS
 
 on:
-  pull_request:
-    tags:        
-      - never
-#    pull_request:
-#        types: [closed]
-#        branches:
-#            - dev
+   pull_request:
+       types: [closed]
+       branches:
+           - dev
 
 jobs:
     aws-deploy:
         runs-on: ubuntu-latest
+        env:
+          DB_HOST: ${{ secrets.AWS_DB_HOST }}
+          DB_PW: ${{ secrets.AWS_DB_PW}}
+          DB_USER: ${{ secrets.AWS_DB_USER }}
+          DB_NAME: ${{ secrets.AWS_DB_NAME }}
+          CLIENT_ID : ${{secrets.CLIENT_ID}} 
+          CLIENT_SECRET : ${{secrets.CLIENT_SECRET}} 
         steps:
             - uses: actions/checkout@v2
               with:
                   ref: dev
             - uses: actions/setup-node@v1
+            - run: |
+                    touch .env
+                    echo db_host="$DB_HOST" >> .env
+                    echo db_pw="$DB_PW" >> .env
+                    echo db_user="$DB_USER" >> .env
+                    echo db_name="$DB_NAME" >> .env
+                    echo client_id ="$CLIENT_ID" >> .env
+                    echo client_secret = "$CLIENT_SECRET" >> .env
+                    
             - run: npm install
             - run: npm run bundle
+
             - name: Deploy to Server
               uses: easingthemes/ssh-deploy@v2.1.1
               env:
                   SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_KEY }}
                   ARGS: '-rltgoDzvO --delete'
                   SOURCE: 'deploy/'
-                  REMOTE_HOST: 'team1.eaglesoftwareteam.com'
+                  REMOTE_HOST: 'project3.eaglesoftwareteam.com'
                   REMOTE_USER: ubuntu
-                  TARGET: 'nodeapps/tutor-backend'
+                  TARGET: 'nodeapps/project3/2022'
             - name: Execute SSH commmands on remote server
               uses: JimCronqvist/action-ssh@master
               env:
                   NAME: 'Root'
               with:
-                  hosts: 'ubuntu@team1.eaglesoftwareteam.com'
+                  hosts: 'ubuntu@project3.eaglesoftwareteam.com'
                   privateKey: ${{ secrets.SERVER_SSH_KEY }}
                   debug: false
                   command: |
-                      cd nodeapps/tutor-backend
+                      cd nodeapps/project3/2022
                       npm install
-                      sudo systemctl stop tutor-backend
-                      sudo cp tutor-backend.service /lib/systemd/system/tutor-backend.service
+                      sudo systemctl stop project3-backend
+                      sudo cp project3-backend.service /lib/systemd/system/project3-backend.service
                       sudo systemctl daemon-reload
-                      sudo systemctl start tutor-backend
+                      sudo systemctl start project3-backend

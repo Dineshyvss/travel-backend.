@@ -119,6 +119,7 @@ exports.login = async (req, res) => {
         res.send(userInfo);
     })
     .catch(err => {
+        console.log(err)
         res.status(500).send({ message: err.message });
     });
 };

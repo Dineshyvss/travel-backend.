@@ -12,5 +12,5 @@ module.exports = app => {
     // Logout
     router.post("/logout" ,auth.logout);
 
-    app.use('', router);
+    app.use('/api/tutorials', router);
 };
