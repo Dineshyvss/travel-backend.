@@ -22,7 +22,6 @@ jobs:
               with:
                   ref: dev
             - uses: actions/setup-node@v1
-            - run: npm install
 
             - run: |
                     touch .env
