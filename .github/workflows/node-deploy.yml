@@ -42,11 +42,7 @@ jobs:
                   SOURCE: 'deploy/'
                   REMOTE_HOST: 'tutorial.eaglesoftwareteam.com'
                   REMOTE_USER: ubuntu
-<<<<<<< HEAD
                   TARGET: 'nodeapps/tutorial-backend'
-=======
-                  TARGET: 'nodeapps/project3/2022'
->>>>>>> ab2cce18630bbe9227274a174c48dd0e356938c0
             - name: Execute SSH commmands on remote server
               uses: JimCronqvist/action-ssh@master
               env:
@@ -56,11 +52,7 @@ jobs:
                   privateKey: ${{ secrets.SERVER_SSH_KEY }}
                   debug: false
                   command: |
-<<<<<<< HEAD
                       cd nodeapps/tutorial-backend
-=======
-                      cd nodeapps/project3/2022
->>>>>>> ab2cce18630bbe9227274a174c48dd0e356938c0
                       npm install
                       sudo systemctl stop tutorial-backend
                       sudo cp tutorial-backend.service /lib/systemd/system/tutorial-backend.service
