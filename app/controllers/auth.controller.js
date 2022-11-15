@@ -5,7 +5,7 @@ const Session = db.session;
 
 const {google} = require('googleapis');
 
-var jwt = require("jsonwebtoken");
+var jwt = require("jsonwebtoken"); 
 
 let googleUser = {};
 
