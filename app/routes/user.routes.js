@@ -1,4 +1,4 @@
-module.exports = app => {
+module.exports = (app) => {
   const user = require("../controllers/user.controller.js");
   const { authenticate } = require("../authorization/authorization.js");
   var router = require("express").Router();
@@ -21,5 +21,5 @@ module.exports = app => {
   // Delete all User
   router.delete("/", [authenticate], user.deleteAll);
 
-  app.use('/tutorial/user', router);
+  app.use("/tutorial/user", router);
 };
