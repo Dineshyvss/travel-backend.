@@ -1,8 +1,6 @@
-// mock out Sequelize
-const sequelize = jest.mock("sequelize");
 //mock out database model
 const db = require("../../app/models");
-const Tutorial = db.tutorial;
+db.tutorial = {};
 
 const app = require("../../server.js");
 const request = require("supertest");
@@ -17,22 +15,22 @@ describe("tutorials controller", () => {
 
   describe("get tutorials list", () => {
     it("calls findAll without query", async () => {
-      Tutorial.findAll = jest.fn().mockResolvedValue(Promise.resolve([]));
+      db.tutorial.findAll = jest.fn().mockResolvedValue(Promise.resolve([]));
       await request(app)
         .get("/api/tutorials")
         .expect(200)
         .then((response) => {
-          expect(Tutorial.findAll).toHaveBeenCalled();
+          expect(db.tutorial.findAll).toHaveBeenCalled();
         });
     });
 
     it("calls findAll with query", async () => {
-      Tutorial.findAll = jest.fn().mockResolvedValue(Promise.resolve([]));
+      db.tutorial.findAll = jest.fn().mockResolvedValue(Promise.resolve([]));
       await request(app)
         .get("/api/tutorials?title=Automated")
         .expect(200)
         .then((response) => {
-          expect(Tutorial.findAll).toHaveBeenCalledWith({
+          expect(db.tutorial.findAll).toHaveBeenCalledWith({
             where: {
               title: {
                 [db.Sequelize.Op.like]: "%Automated%",
@@ -43,7 +41,7 @@ describe("tutorials controller", () => {
     });
 
     it("responds with results from findAll", async () => {
-      Tutorial.findAll = jest
+      db.tutorial.findAll = jest
         .fn()
         .mockResolvedValue(Promise.resolve([testTutorial]));
       await request(app)
@@ -56,7 +54,7 @@ describe("tutorials controller", () => {
     });
 
     it("responds with 500 and message on error", async () => {
-      Tutorial.findAll = jest
+      db.tutorial.findAll = jest
         .fn()
         .mockImplementation(() =>
           Promise.reject(new Error("Fake error from test"))

@@ -4,7 +4,7 @@
   "description": "Tutorial Node.js with Rest API",
   "main": "server.js",
   "scripts": {
-    "test": "jest",
+    "test": "jest --detectOpenHandles",
     "start": "node server.js",
     "bundle": "mkdir deploy && cp -r app server.js package.json package-lock.json tutorial-backend.service .env deploy"
   },
