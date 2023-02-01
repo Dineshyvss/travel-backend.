@@ -44,6 +44,7 @@ exports.findAll = (req, res) => {
       });
     });
 };
+
 // Find a single Tutorial with an id
 exports.findAllForUser = (req, res) => {
   const userId = req.params.userId;
@@ -53,13 +54,15 @@ exports.findAllForUser = (req, res) => {
         res.send(data);
       } else {
         res.status(404).send({
-          message: `Cannot find Tutorial with id=${id}.`,
+          message: `Cannot find Tutorials for user with id=${userId}.`,
         });
       }
     })
     .catch((err) => {
       res.status(500).send({
-        message: "Error retrieving Tutorial with id=" + id,
+        message:
+          err.message ||
+          "Error retrieving Tutorials for user with id=" + userId,
       });
     });
 };
@@ -78,7 +81,7 @@ exports.findOne = (req, res) => {
     })
     .catch((err) => {
       res.status(500).send({
-        message: "Error retrieving Tutorial with id=" + id,
+        message: err.message || "Error retrieving Tutorial with id=" + id,
       });
     });
 };
@@ -101,7 +104,7 @@ exports.update = (req, res) => {
     })
     .catch((err) => {
       res.status(500).send({
-        message: "Error updating Tutorial with id=" + id,
+        message: err.message || "Error updating Tutorial with id=" + id,
       });
     });
 };
@@ -124,7 +127,7 @@ exports.delete = (req, res) => {
     })
     .catch((err) => {
       res.status(500).send({
-        message: "Could not delete Tutorial with id=" + id,
+        message: err.message || "Could not delete Tutorial with id=" + id,
       });
     });
 };
@@ -141,19 +144,6 @@ exports.deleteAll = (req, res) => {
       res.status(500).send({
         message:
           err.message || "Some error occurred while removing all tutorials.",
-      });
-    });
-};
-// Find all published Tutorials
-exports.findAllPublished = (req, res) => {
-  Tutorial.findAll({ where: { published: true } })
-    .then((data) => {
-      res.send(data);
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message:
-          err.message || "Some error occurred while retrieving tutorials.",
       });
     });
 };
