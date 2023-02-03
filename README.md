@@ -14,6 +14,7 @@ npm install
 ```
 
 2. Configure **Apache** to point to **Node** for API requests.
+    - We recommend using XAMPP to serve this project.
     - In XAMPP, find the **Edit/Configure** button for **Apache**.
     - Edit the **conf** file, labeled **httpd.conf**. 
     - It may warn you when opening it but open it anyway.
