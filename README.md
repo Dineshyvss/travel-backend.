@@ -31,7 +31,8 @@ npm install
     LoadModule proxy_http2_module modules/mod_proxy_http2.so
     ```
     
-    - Save the file and exit XAMPP.
+    - Save the file.
+    - **Restart Apache** and exit XAMPP.
 
 3. Make a local **tutorial** database.
     - Create a schema/database.
