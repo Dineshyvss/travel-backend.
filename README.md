@@ -1,7 +1,7 @@
 # Tutorial Backend with Node
 
 This application allows users to create and maintain a list of tutorials that can have multiple lessons within. Please visit https://github.com/OC-ComputerScience/tutorial-frontend-vue2 for the Vue 2 frontend repository or https://github.com/OC-ComputerScience/tutorial-frontend-vue3 for the Vue 3 frontend repository.
-
+ 
 #### Please note:
 - You will need to create a database and be able to run it locally.
 - This project utilizes **Google Authentication** to allow users to log in.
