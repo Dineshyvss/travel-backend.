@@ -43,7 +43,7 @@ jobs:
           SOURCE: "deploy/"
           REMOTE_HOST: "tutorial.eaglesoftwareteam.com"
           REMOTE_USER: ubuntu
-          TARGET: "nodeapps/tutorial-backend"
+          TARGET: "nodeapps/recipe-backend"
       - name: Execute SSH commmands on remote server
         uses: JimCronqvist/action-ssh@master
         env:
@@ -53,9 +53,9 @@ jobs:
           privateKey: ${{ secrets.SERVER_SSH_KEY }}
           debug: false
           command: |
-            cd nodeapps/tutorial-backend
+            cd nodeapps/recipe-backend
             npm install
-            sudo systemctl stop tutorial-backend
-            sudo cp tutorial-backend.service /lib/systemd/system/tutorial-backend.service
+            sudo systemctl stop recipe-backend
+            sudo cp recipe-backend.service /lib/systemd/system/recipe-backend.service
             sudo systemctl daemon-reload
-            sudo systemctl start tutorial-backend
+            sudo systemctl start recipe-backend

@@ -24,16 +24,18 @@ app.use(express.urlencoded({ extended: true }));
 
 // simple route
 app.get("/", (req, res) => {
-  res.json({ message: "Welcome to bezkoder application." });
+  res.json({ message: "Welcome to the recipe backend." });
 });
 
 require("./app/routes/auth.routes.js")(app);
+require("./app/routes/ingredient.routes")(app);
+require("./app/routes/recipe.routes")(app);
+require("./app/routes/recipeStep.routes")(app);
+require("./app/routes/recipeStepIngredient.routes")(app);
 require("./app/routes/user.routes")(app);
-require("./app/routes/tutorial.routes")(app);
-require("./app/routes/lesson.routes")(app);
 
 // set port, listen for requests
-const PORT = process.env.PORT || 3100;
+const PORT = process.env.PORT || 3200;
 if (process.env.NODE_ENV !== "test") {
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}.`);

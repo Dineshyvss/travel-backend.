@@ -14,10 +14,15 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
-db.user = require("./user.model.js")(sequelize, Sequelize);
+db.ingredient = require("./ingredient.model.js")(sequelize, Sequelize);
+db.recipe = require("./recipe.model.js")(sequelize, Sequelize);
+db.recipeStep = require("./recipeStep.model.js")(sequelize, Sequelize);
+db.recipeStepIngredient = require("./recipeStepIngredient.model.js")(
+  sequelize,
+  Sequelize
+);
 db.session = require("./session.model.js")(sequelize, Sequelize);
-db.tutorial = require("./tutorial.model.js")(sequelize, Sequelize);
-db.lesson = require("./lesson.model.js")(sequelize, Sequelize);
+db.user = require("./user.model.js")(sequelize, Sequelize);
 
 // foreign key for session
 db.user.hasMany(
@@ -31,27 +36,49 @@ db.session.belongsTo(
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
 );
 
-// foreign key for tutorials
+// foreign key for recipe
 db.user.hasMany(
-  db.tutorial,
-  { as: "tutorial" },
+  db.recipe,
+  { as: "recipe" },
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
 );
-db.tutorial.belongsTo(
+db.recipe.belongsTo(
   db.user,
   { as: "user" },
+  { foreignKey: { allowNull: true }, onDelete: "CASCADE" }
+);
+
+// foreign key for recipeStep
+db.recipe.hasMany(
+  db.recipeStep,
+  { as: "recipeStep" },
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
+db.recipeStep.belongsTo(
+  db.recipe,
+  { as: "recipe" },
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
 );
 
-// foreign key for lessons
-db.tutorial.hasMany(
-  db.lesson,
-  { as: "lesson" },
+// foreign keys for recipeStepIngredient
+db.recipeStep.hasMany(
+  db.recipeStepIngredient,
+  { as: "recipeStepIngredient" },
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
 );
-db.lesson.belongsTo(
-  db.tutorial,
-  { as: "tutorial" },
+db.ingredient.hasMany(
+  db.recipeStepIngredient,
+  { as: "recipeStepIngredient" },
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
+db.recipeStepIngredient.belongsTo(
+  db.recipeStep,
+  { as: "recipeStep" },
+  { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
+);
+db.recipeStepIngredient.belongsTo(
+  db.ingredient,
+  { as: "ingredient" },
   { foreignKey: { allowNull: false }, onDelete: "CASCADE" }
 );
 
