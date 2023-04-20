@@ -52,7 +52,7 @@ npm install
    - DB_HOST = 'localhost'
    - DB_PW = '**your-local-database-password**'
    - DB_USER = '**your-local-database-username**' (usually "root")
-   - DB_NAME = '**your-local-database-name**'
+   - DB_NAME = '**your-local-database-name**' (example: "recipe_db")
 
 6. Compile and run the project locally.
 
