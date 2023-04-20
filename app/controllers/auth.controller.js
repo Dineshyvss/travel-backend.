@@ -70,8 +70,8 @@ exports.login = async (req, res) => {
       } else {
         // create a new User and save to database
         user = {
-          fName: firstName,
-          lName: lastName,
+          firstName: firstName,
+          lastName: lastName,
           email: email,
         };
       }
@@ -96,12 +96,12 @@ exports.login = async (req, res) => {
   } else {
     console.log(user);
     // doing this to ensure that the user's name is the one listed with Google
-    user.fName = firstName;
-    user.lName = lastName;
+    user.firstName = firstName;
+    user.lastName = lastName;
     console.log(user);
     await User.update(user, { where: { id: user.id } })
-      .then((num) => {
-        if (num == 1) {
+      .then((number) => {
+        if (number == 1) {
           console.log("updated user's name");
         } else {
           console.log(
@@ -129,8 +129,8 @@ exports.login = async (req, res) => {
           session.token = "";
           // clear session's token if it's expired
           await Session.update(session, { where: { id: session.id } })
-            .then((num) => {
-              if (num == 1) {
+            .then((number) => {
+              if (number == 1) {
                 console.log("successfully logged out");
               } else {
                 console.log("failed");
@@ -151,8 +151,8 @@ exports.login = async (req, res) => {
           // if the session is still valid, then send info to the front end
           let userInfo = {
             email: user.email,
-            fName: user.fName,
-            lName: user.lName,
+            firstName: user.firstName,
+            lastName: user.lastName,
             userId: user.id,
             token: session.token,
             // refresh_token: user.refresh_token,
@@ -192,8 +192,8 @@ exports.login = async (req, res) => {
       .then(() => {
         let userInfo = {
           email: user.email,
-          fName: user.fName,
-          lName: user.lName,
+          firstName: user.firstName,
+          lastName: user.lastName,
           userId: user.id,
           token: token,
           // refresh_token: user.refresh_token,
@@ -246,8 +246,8 @@ exports.authorize = async (req, res) => {
   user.expiration_date = tempExpirationDate;
 
   await User.update(user, { where: { id: user.id } })
-    .then((num) => {
-      if (num == 1) {
+    .then((number) => {
+      if (number == 1) {
         console.log("updated user's google token stuff");
       } else {
         console.log(
@@ -298,8 +298,8 @@ exports.logout = async (req, res) => {
   // session won't be null but the id will if no session was found
   if (session.id !== undefined) {
     Session.update(session, { where: { id: session.id } })
-      .then((num) => {
-        if (num == 1) {
+      .then((number) => {
+        if (number == 1) {
           console.log("successfully logged out");
           res.send({
             message: "User has been successfully logged out!",

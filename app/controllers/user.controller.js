@@ -5,21 +5,31 @@ const Op = db.Sequelize.Op;
 // Create and Save a new User
 exports.create = (req, res) => {
   // Validate request
-  if (!req.body.fName) {
-    res.status(400).send({
-      message: "Content can not be empty!",
-    });
-    return;
+  if (req.body.firstName === undefined) {
+    const error = new Error("First name cannot be empty for user!");
+    error.statusCode = 400;
+    throw error;
+  } else if (req.body.lastName === undefined) {
+    const error = new Error("Last name cannot be empty for user!");
+    error.statusCode = 400;
+    throw error;
+  } else if (req.body.email === undefined) {
+    const error = new Error("Email cannot be empty for user!");
+    error.statusCode = 400;
+    throw error;
+  } else if (req.body.password === undefined) {
+    const error = new Error("Password cannot be empty for user!");
+    error.statusCode = 400;
+    throw error;
   }
 
   // Create a User
   const user = {
     id: req.body.id,
-    fName: req.body.fName,
-    lName: req.body.lName,
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
     email: req.body.email,
-    // refresh_token: req.body.refresh_token,
-    // expiration_date: req.body.expiration_date
+    password: req.body.password,
   };
 
   // Save User in the database
@@ -34,7 +44,7 @@ exports.create = (req, res) => {
     });
 };
 
-// Retrieve all People from the database.
+// Retrieve all Users from the database.
 exports.findAll = (req, res) => {
   const id = req.query.id;
   var condition = id ? { id: { [Op.like]: `%${id}%` } } : null;
@@ -45,7 +55,7 @@ exports.findAll = (req, res) => {
     })
     .catch((err) => {
       res.status(500).send({
-        message: err.message || "Some error occurred while retrieving people.",
+        message: err.message || "Some error occurred while retrieving users.",
       });
     });
 };
@@ -60,13 +70,13 @@ exports.findOne = (req, res) => {
         res.send(data);
       } else {
         res.status(404).send({
-          message: `Cannot find User with id=${id}.`,
+          message: `Cannot find User with id = ${id}.`,
         });
       }
     })
     .catch((err) => {
       res.status(500).send({
-        message: "Error retrieving User with id=" + id,
+        message: err.message || "Error retrieving User with id = " + id,
       });
     });
 };
@@ -92,7 +102,7 @@ exports.findByEmail = (req, res) => {
     })
     .catch((err) => {
       res.status(500).send({
-        message: "Error retrieving User with email=" + email,
+        message: err.message || "Error retrieving User with email=" + email,
       });
     });
 };
@@ -104,20 +114,20 @@ exports.update = (req, res) => {
   User.update(req.body, {
     where: { id: id },
   })
-    .then((num) => {
-      if (num == 1) {
+    .then((number) => {
+      if (number == 1) {
         res.send({
           message: "User was updated successfully.",
         });
       } else {
         res.send({
-          message: `Cannot update User with id=${id}. Maybe User was not found or req.body is empty!`,
+          message: `Cannot update User with id = ${id}. Maybe User was not found or req.body is empty!`,
         });
       }
     })
     .catch((err) => {
       res.status(500).send({
-        message: "Error updating User with id=" + id,
+        message: err.message || "Error updating User with id =" + id,
       });
     });
 };
@@ -129,20 +139,20 @@ exports.delete = (req, res) => {
   User.destroy({
     where: { id: id },
   })
-    .then((num) => {
-      if (num == 1) {
+    .then((number) => {
+      if (number == 1) {
         res.send({
           message: "User was deleted successfully!",
         });
       } else {
         res.send({
-          message: `Cannot delete User with id=${id}. Maybe User was not found!`,
+          message: `Cannot delete User with id = ${id}. Maybe User was not found!`,
         });
       }
     })
     .catch((err) => {
       res.status(500).send({
-        message: "Could not delete User with id=" + id,
+        message: err.message || "Could not delete User with id = " + id,
       });
     });
 };
@@ -153,8 +163,8 @@ exports.deleteAll = (req, res) => {
     where: {},
     truncate: false,
   })
-    .then((nums) => {
-      res.send({ message: `${nums} People were deleted successfully!` });
+    .then((number) => {
+      res.send({ message: `${number} People were deleted successfully!` });
     })
     .catch((err) => {
       res.status(500).send({
