@@ -89,13 +89,13 @@ exports.findAllForRecipeWithIngredients = (req, res) => {
     include: [
       {
         model: RecipeStepIngredient,
-        as: "recipeStepIngredients",
-        required: true,
+        as: "recipeStepIngredient",
+        required: false,
         include: [
           {
             model: Ingredient,
             as: "ingredient",
-            required: true,
+            required: false,
           },
         ],
       },

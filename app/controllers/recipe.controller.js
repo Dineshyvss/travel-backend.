@@ -1,5 +1,8 @@
 const db = require("../models");
 const Recipe = db.recipe;
+const RecipeStep = db.recipeStep;
+const RecipeStepIngredient = db.recipeStepIngredient;
+const Ingredient = db.ingredient;
 const Op = db.Sequelize.Op;
 // Create and Save a new Recipe
 exports.create = (req, res) => {
@@ -89,7 +92,31 @@ exports.findAllForUser = (req, res) => {
 exports.findAllWithoutUser = (req, res) => {
   Recipe.findAll({
     where: { userId: null },
-    order: [["name", "ASC"]],
+    include: [
+      {
+        model: RecipeStep,
+        as: "recipeStep",
+        required: true,
+        include: [
+          {
+            model: RecipeStepIngredient,
+            as: "recipeStepIngredient",
+            required: false,
+            include: [
+              {
+                model: Ingredient,
+                as: "ingredient",
+                required: false,
+              },
+            ],
+          },
+        ],
+      },
+    ],
+    order: [
+      ["name", "ASC"],
+      [RecipeStep, "stepNumber", "ASC"],
+    ],
   })
     .then((data) => {
       if (data) {

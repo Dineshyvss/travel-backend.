@@ -1,7 +1,7 @@
 module.exports = (sequelize, Sequelize) => {
   const RecipeStepIngredient = sequelize.define("recipeStepIngredient", {
     quantity: {
-      type: Sequelize.INTEGER,
+      type: Sequelize.FLOAT,
       allowNull: false,
     },
   });

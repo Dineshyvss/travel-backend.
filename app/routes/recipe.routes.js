@@ -7,13 +7,13 @@ module.exports = (app) => {
   router.post("/recipes/", Recipe.create);
 
   // Retrieve all Recipes
-  router.get("/recipes/", Recipe.findAll);
+  router.get("/recipes/all", Recipe.findAll);
 
   // Retrieve all Recipes for user
   router.get("/recipes/user/:userId", Recipe.findAllForUser);
 
   // Retrieve all Recipes without user
-  router.get("/recipes/public", Recipe.findAllWithoutUser);
+  router.get("/recipes/", Recipe.findAllWithoutUser);
 
   // Retrieve a single Recipe with id
   router.get("/recipes/:id", Recipe.findOne);
