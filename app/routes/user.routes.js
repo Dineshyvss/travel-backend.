@@ -4,22 +4,22 @@ module.exports = (app) => {
   var router = require("express").Router();
 
   // Create a new User
-  router.post("/user/", User.create);
+  router.post("/users/", User.create);
 
   // Retrieve all Users
-  router.get("/user/", User.findAll);
+  router.get("/users/", User.findAll);
 
   // Retrieve a single User with id
-  router.get("/user/:id", User.findOne);
+  router.get("/users/:id", User.findOne);
 
   // Update a User with id
-  router.put("/user/:id", User.update);
+  router.put("/users/:id", User.update);
 
   // Delete a User with id
-  router.delete("/user/:id", User.delete);
+  router.delete("/users/:id", User.delete);
 
   // Delete all User
-  router.delete("/user/", User.deleteAll);
+  router.delete("/users/", User.deleteAll);
 
   app.use("/recipeapi", router);
 };

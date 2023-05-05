@@ -1,24 +1,24 @@
 module.exports = (app) => {
-  const Ingredients = require("../controllers/ingredient.controller.js");
+  const Ingredient = require("../controllers/ingredient.controller.js");
   var router = require("express").Router();
 
   // Create a new Ingredient
-  app.post("/ingredients", Ingredients.create);
+  router.post("/ingredients/", Ingredient.create);
 
-  // Retrieve all Ingredients
-  app.get("/ingredients", Ingredients.findAll);
+  // Retrieve all Ingredient
+  router.get("/ingredients/", Ingredient.findAll);
 
   // Retrieve a single Ingredient with ingredientId
-  app.get("/ingredients/:ingredientId", Ingredients.findOne);
+  router.get("/ingredients/:ingredientId", Ingredient.findOne);
 
   // Update an Ingredient with ingredientId
-  app.put("/ingredients/:ingredientId", Ingredients.update);
+  router.put("/ingredients/:ingredientId", Ingredient.update);
 
   // Delete an Ingredient with ingredientId
-  app.delete("/ingredients/:ingredientId", Ingredients.delete);
+  router.delete("/ingredients/:ingredientId", Ingredient.delete);
 
   // Create a new Ingredient
-  app.delete("/ingredients", Ingredients.deleteAll);
+  router.delete("/ingredients/", Ingredient.deleteAll);
 
   app.use("/recipeapi", router);
 };

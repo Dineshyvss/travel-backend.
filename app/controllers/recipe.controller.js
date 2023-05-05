@@ -96,7 +96,7 @@ exports.findAllWithoutUser = (req, res) => {
       {
         model: RecipeStep,
         as: "recipeStep",
-        required: true,
+        required: false,
         include: [
           {
             model: RecipeStepIngredient,
@@ -137,7 +137,31 @@ exports.findAllWithoutUser = (req, res) => {
 // Find a single Recipe with an id
 exports.findOne = (req, res) => {
   const id = req.params.id;
-  Recipe.findByPk(id)
+  Recipe.findAll({
+    where: { id: id },
+    include: [
+      {
+        model: RecipeStep,
+        as: "recipeStep",
+        required: false,
+        include: [
+          {
+            model: RecipeStepIngredient,
+            as: "recipeStepIngredient",
+            required: false,
+            include: [
+              {
+                model: Ingredient,
+                as: "ingredient",
+                required: false,
+              },
+            ],
+          },
+        ],
+      },
+    ],
+    order: [[RecipeStep, "stepNumber", "ASC"]],
+  })
     .then((data) => {
       if (data) {
         res.send(data);
