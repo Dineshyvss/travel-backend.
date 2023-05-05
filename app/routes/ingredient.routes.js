@@ -9,13 +9,13 @@ module.exports = (app) => {
   router.get("/ingredients/", Ingredient.findAll);
 
   // Retrieve a single Ingredient with ingredientId
-  router.get("/ingredients/:ingredientId", Ingredient.findOne);
+  router.get("/ingredients/:id", Ingredient.findOne);
 
   // Update an Ingredient with ingredientId
-  router.put("/ingredients/:ingredientId", Ingredient.update);
+  router.put("/ingredients/:id", Ingredient.update);
 
   // Delete an Ingredient with ingredientId
-  router.delete("/ingredients/:ingredientId", Ingredient.delete);
+  router.delete("/ingredients/:id", Ingredient.delete);
 
   // Create a new Ingredient
   router.delete("/ingredients/", Ingredient.deleteAll);
