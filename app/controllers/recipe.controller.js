@@ -1,7 +1,7 @@
 const db = require("../models");
 const Recipe = db.recipe;
 const RecipeStep = db.recipeStep;
-const RecipeStepIngredient = db.recipeStepIngredient;
+const RecipeIngredient = db.recipeIngredient;
 const Ingredient = db.ingredient;
 const Op = db.Sequelize.Op;
 // Create and Save a new Recipe
@@ -99,8 +99,8 @@ exports.findAllWithoutUser = (req, res) => {
         required: false,
         include: [
           {
-            model: RecipeStepIngredient,
-            as: "recipeStepIngredient",
+            model: RecipeIngredient,
+            as: "recipeIngredient",
             required: false,
             include: [
               {
@@ -146,8 +146,8 @@ exports.findOne = (req, res) => {
         required: false,
         include: [
           {
-            model: RecipeStepIngredient,
-            as: "recipeStepIngredient",
+            model: RecipeIngredient,
+            as: "recipeIngredient",
             required: false,
             include: [
               {

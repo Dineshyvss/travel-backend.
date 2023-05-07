@@ -31,7 +31,7 @@ require("./app/routes/auth.routes.js")(app);
 require("./app/routes/ingredient.routes")(app);
 require("./app/routes/recipe.routes")(app);
 require("./app/routes/recipeStep.routes")(app);
-require("./app/routes/recipeStepIngredient.routes")(app);
+require("./app/routes/recipeIngredient.routes")(app);
 require("./app/routes/user.routes")(app);
 
 // set port, listen for requests

@@ -4,7 +4,7 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.INTEGER,
       allowNull: false,
     },
-    description: {
+    instruction: {
       type: Sequelize.STRING(5000),
       allowNull: false,
     },

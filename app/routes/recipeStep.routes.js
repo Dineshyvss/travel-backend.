@@ -19,13 +19,13 @@ module.exports = (app) => {
   );
 
   // Retrieve a single Recipe Step with id
-  router.get("/recipeSteps/:id", RecipeStep.findOne);
+  router.get("/recipes/:recipeId/recipeSteps/:id", RecipeStep.findOne);
 
   // Update a Recipe Step with id
-  router.put("/recipeSteps/:id", RecipeStep.update);
+  router.put("/recipes/:recipeId/recipeSteps/:id", RecipeStep.update);
 
   // Delete a Recipe Step with id
-  router.delete("/recipeSteps/:id", RecipeStep.delete);
+  router.delete("/recipes/:recipeId/recipeSteps/:id", RecipeStep.delete);
 
   // Delete all Recipe Steps
   router.delete("/recipeSteps/", RecipeStep.deleteAll);

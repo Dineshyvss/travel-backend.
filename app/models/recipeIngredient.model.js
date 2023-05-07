@@ -1,9 +1,9 @@
 module.exports = (sequelize, Sequelize) => {
-  const RecipeStepIngredient = sequelize.define("recipeStepIngredient", {
+  const RecipeIngredient = sequelize.define("recipeIngredient", {
     quantity: {
       type: Sequelize.FLOAT,
       allowNull: false,
     },
   });
-  return RecipeStepIngredient;
+  return RecipeIngredient;
 };
