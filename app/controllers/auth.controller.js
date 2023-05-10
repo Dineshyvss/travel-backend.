@@ -13,7 +13,8 @@ exports.login = async (req, res) => {
     user = data;
   });
 
-  let expireTime = new Date(Date.now() + 1);
+  let expireTime = new Date();
+  expireTime.setDate(expireTime.getDate() + 1);
 
   const session = {
     email: user.email,
@@ -35,9 +36,20 @@ exports.login = async (req, res) => {
 };
 
 exports.logout = async (req, res) => {
-  let { sessionId } = await authenticate(req, false);
-  if (sessionId == null) return;
-  await Session.delete({ where: { id: sessionId } }).catch((error) => {
-    console.log(error);
-  });
+  let auth = req.get("authorization");
+  console.log(auth);
+  if (
+    auth != null &&
+    auth.startsWith("Bearer ") &&
+    (typeof require !== "string" || require === "token")
+  ) {
+    let token = auth.slice(7);
+    let sessionId = await decrypt(token);
+    if (sessionId == null) return;
+    return await Session.destroy({ where: { id: sessionId } }).catch(
+      (error) => {
+        console.log(error);
+      }
+    );
+  }
 };

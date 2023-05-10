@@ -56,7 +56,8 @@ exports.create = async (req, res) => {
             // Create a Session for the new user
             let userId = data.id;
 
-            let expireTime = new Date(Date.now() + 1);
+            let expireTime = new Date();
+            expireTime.setDate(expireTime.getDate() + 1);
 
             const session = {
               email: req.body.email,

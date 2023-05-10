@@ -23,6 +23,14 @@ exports.create = (req, res) => {
     const error = new Error("Time cannot be empty for recipe!");
     error.statusCode = 400;
     throw error;
+  } else if (req.body.isPublished === undefined) {
+    const error = new Error("Is Published cannot be empty for recipe!");
+    error.statusCode = 400;
+    throw error;
+  } else if (req.body.userId === undefined) {
+    const error = new Error("User Id cannot be empty for recipe!");
+    error.statusCode = 400;
+    throw error;
   }
 
   // Create a Recipe
@@ -31,7 +39,8 @@ exports.create = (req, res) => {
     description: req.body.description,
     servings: req.body.servings,
     time: req.body.time,
-    userId: req.body.userId ? req.body.userId : null,
+    isPublished: req.body.isPublished ? req.body.isPublished : false,
+    userId: req.body.userId,
   };
   // Save Recipe in the database
   Recipe.create(recipe)
@@ -46,52 +55,11 @@ exports.create = (req, res) => {
     });
 };
 
-// Retrieve all Recipes from the database.
-exports.findAll = (req, res) => {
-  const recipeId = req.query.recipeId;
-  var condition = recipeId
-    ? {
-        id: {
-          [Op.like]: `%${recipeId}%`,
-        },
-      }
-    : null;
-  Recipe.findAll({ where: condition, order: [["name", "ASC"]] })
-    .then((data) => {
-      res.send(data);
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message: err.message || "Some error occurred while retrieving recipes.",
-      });
-    });
-};
-
 // Find all Recipes for a user
 exports.findAllForUser = (req, res) => {
   const userId = req.params.userId;
-  Recipe.findAll({ where: { userId: userId }, order: [["name", "ASC"]] })
-    .then((data) => {
-      if (data) {
-        res.send(data);
-      } else {
-        res.status(404).send({
-          message: `Cannot find Recipes for user with id=${userId}.`,
-        });
-      }
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message:
-          err.message || "Error retrieving Recipes for user with id=" + userId,
-      });
-    });
-};
-
-// find all Recipes without a user
-exports.findAllWithoutUser = (req, res) => {
   Recipe.findAll({
-    where: { userId: null },
+    where: { userId: userId },
     include: [
       {
         model: RecipeStep,
@@ -123,13 +91,60 @@ exports.findAllWithoutUser = (req, res) => {
         res.send(data);
       } else {
         res.status(404).send({
-          message: `Cannot find Recipes without a user.`,
+          message: `Cannot find Recipes for user with id=${userId}.`,
         });
       }
     })
     .catch((err) => {
       res.status(500).send({
-        message: err.message || "Error retrieving Recipes without a user.",
+        message:
+          err.message || "Error retrieving Recipes for user with id=" + userId,
+      });
+    });
+};
+
+// Find all Published Recipes
+exports.findAllPublished = (req, res) => {
+  Recipe.findAll({
+    where: { isPublished: true },
+    include: [
+      {
+        model: RecipeStep,
+        as: "recipeStep",
+        required: false,
+        include: [
+          {
+            model: RecipeIngredient,
+            as: "recipeIngredient",
+            required: false,
+            include: [
+              {
+                model: Ingredient,
+                as: "ingredient",
+                required: false,
+              },
+            ],
+          },
+        ],
+      },
+    ],
+    order: [
+      ["name", "ASC"],
+      [RecipeStep, "stepNumber", "ASC"],
+    ],
+  })
+    .then((data) => {
+      if (data) {
+        res.send(data);
+      } else {
+        res.status(404).send({
+          message: `Cannot find Published Recipes.`,
+        });
+      }
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: err.message || "Error retrieving Published Recipes.",
       });
     });
 };

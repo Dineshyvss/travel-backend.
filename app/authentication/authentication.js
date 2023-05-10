@@ -58,7 +58,7 @@ authenticate = async (req, require = true) => {
       (typeof require !== "string" || require === "token")
     ) {
       let token = auth.slice(7);
-      let { sessionId } = await decrypt(token);
+      let sessionId = await decrypt(token);
       let session = {};
       await Session.findAll({ where: { id: sessionId } })
         .then((data) => {
@@ -100,8 +100,51 @@ authenticate = async (req, require = true) => {
   return { type: "none", userId: null };
 };
 
+authenticateRoute = async (req, res, next) => {
+  let auth = req.get("authorization");
+  console.log(auth);
+  if (auth != null) {
+    if (
+      auth.startsWith("Bearer ") &&
+      (typeof require !== "string" || require === "token")
+    ) {
+      let token = auth.slice(7);
+      let sessionId = await decrypt(token);
+      let session = {};
+      await Session.findAll({ where: { id: sessionId } })
+        .then((data) => {
+          session = data[0];
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      if (session != null) {
+        console.log(session >= Date.now());
+        console.log(Date.now());
+        if (session.expirationDate >= Date.now()) {
+          next();
+          return;
+        } else {
+          return res.status(401).send({
+            message: "Unauthorized! Expired Token, Logout and Login again",
+          });
+        }
+      } else {
+        return res.status(401).send({
+          message: "Unauthorized! Expired Token, Logout and Login again",
+        });
+      }
+    }
+  } else {
+    return res.status(401).send({
+      message: "Unauthorized! No Auth Header",
+    });
+  }
+};
+
 const auth = {
   authenticate: authenticate,
+  authenticateRoute: authenticateRoute,
 };
 
 module.exports = auth;

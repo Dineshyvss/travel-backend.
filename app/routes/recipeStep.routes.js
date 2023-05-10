@@ -4,7 +4,11 @@ module.exports = (app) => {
   var router = require("express").Router();
 
   // Create a new Recipe Step for a Recipe
-  router.post("/recipes/:recipeId/recipeSteps/", RecipeStep.create);
+  router.post(
+    "/recipes/:recipeId/recipeSteps/",
+    [authenticateRoute],
+    RecipeStep.create
+  );
 
   // Retrieve all Recipe Steps
   router.get("/recipeSteps/", RecipeStep.findAll);
@@ -22,13 +26,21 @@ module.exports = (app) => {
   router.get("/recipes/:recipeId/recipeSteps/:id", RecipeStep.findOne);
 
   // Update a Recipe Step with id
-  router.put("/recipes/:recipeId/recipeSteps/:id", RecipeStep.update);
+  router.put(
+    "/recipes/:recipeId/recipeSteps/:id",
+    [authenticateRoute],
+    RecipeStep.update
+  );
 
   // Delete a Recipe Step with id
-  router.delete("/recipes/:recipeId/recipeSteps/:id", RecipeStep.delete);
+  router.delete(
+    "/recipes/:recipeId/recipeSteps/:id",
+    [authenticateRoute],
+    RecipeStep.delete
+  );
 
   // Delete all Recipe Steps
-  router.delete("/recipeSteps/", RecipeStep.deleteAll);
+  router.delete("/recipeSteps/", [authenticateRoute], RecipeStep.deleteAll);
 
   app.use("/recipeapi", router);
 };

@@ -16,6 +16,10 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.INTEGER,
       allowNull: false,
     },
+    isPublished: {
+      type: Sequelize.BOOLEAN,
+      allowNull: false,
+    },
   });
   return Recipe;
 };

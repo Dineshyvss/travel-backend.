@@ -1,9 +1,10 @@
 module.exports = (app) => {
   const Ingredient = require("../controllers/ingredient.controller.js");
   var router = require("express").Router();
+  const { authenticateRoute } = require("../authentication/authentication");
 
   // Create a new Ingredient
-  router.post("/ingredients/", Ingredient.create);
+  router.post("/ingredients/", [authenticateRoute], Ingredient.create);
 
   // Retrieve all Ingredient
   router.get("/ingredients/", Ingredient.findAll);
@@ -12,13 +13,13 @@ module.exports = (app) => {
   router.get("/ingredients/:id", Ingredient.findOne);
 
   // Update an Ingredient with ingredientId
-  router.put("/ingredients/:id", Ingredient.update);
+  router.put("/ingredients/:id", [authenticateRoute], Ingredient.update);
 
   // Delete an Ingredient with ingredientId
-  router.delete("/ingredients/:id", Ingredient.delete);
+  router.delete("/ingredients/:id", [authenticateRoute], Ingredient.delete);
 
   // Create a new Ingredient
-  router.delete("/ingredients/", Ingredient.deleteAll);
+  router.delete("/ingredients/", [authenticateRoute], Ingredient.deleteAll);
 
   app.use("/recipeapi", router);
 };

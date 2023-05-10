@@ -13,13 +13,13 @@ module.exports = (app) => {
   router.get("/users/:id", User.findOne);
 
   // Update a User with id
-  router.put("/users/:id", User.update);
+  router.put("/users/:id", [authenticateRoute], User.update);
 
   // Delete a User with id
-  router.delete("/users/:id", User.delete);
+  router.delete("/users/:id", [authenticateRoute], User.delete);
 
   // Delete all User
-  router.delete("/users/", User.deleteAll);
+  router.delete("/users/", [authenticateRoute], User.deleteAll);
 
   app.use("/recipeapi", router);
 };
