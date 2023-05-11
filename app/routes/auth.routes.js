@@ -6,11 +6,8 @@ module.exports = (app) => {
   // Login
   router.post("/login", auth.login);
 
-  // Authorization
-  router.post("/authorize/:id", auth.authorize);
-
   // Logout
   router.post("/logout", auth.logout);
 
-  app.use("/recipe", router);
+  app.use("/recipeapi", router);
 };

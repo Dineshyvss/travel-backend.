@@ -1,31 +1,32 @@
 module.exports = (app) => {
   const Recipe = require("../controllers/recipe.controller.js");
-  // const { authenticate } = require("../authorization/authorization.js");
+  const { authenticateRoute } = require("../authentication/authentication");
   var router = require("express").Router();
 
   // Create a new Recipe
-  router.post("/recipes/", Recipe.create);
-
-  // Retrieve all Recipes
-  router.get("/recipes/", Recipe.findAll);
+  router.post("/recipes/", [authenticateRoute], Recipe.create);
 
   // Retrieve all Recipes for user
-  router.get("/recipes/user/:userId", Recipe.findAllForUser);
+  router.get(
+    "/recipes/user/:userId",
+    [authenticateRoute],
+    Recipe.findAllForUser
+  );
 
-  // Retrieve all Recipes without user
-  router.get("/recipes/public", Recipe.findAllWithoutUser);
+  // Retrieve all published Recipes
+  router.get("/recipes/", Recipe.findAllPublished);
 
   // Retrieve a single Recipe with id
   router.get("/recipes/:id", Recipe.findOne);
 
   // Update a Recipe with id
-  router.put("/recipes/:id", Recipe.update);
+  router.put("/recipes/:id", [authenticateRoute], Recipe.update);
 
   // Delete a Recipe with id
-  router.delete("/recipes/:id", Recipe.delete);
+  router.delete("/recipes/:id", [authenticateRoute], Recipe.delete);
 
   // Delete all Recipes
-  router.delete("/recipes/", Recipe.deleteAll);
+  router.delete("/recipes/", [authenticateRoute], Recipe.deleteAll);
 
   app.use("/recipeapi", router);
 };

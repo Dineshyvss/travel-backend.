@@ -13,7 +13,11 @@ module.exports = (sequelize, Sequelize) => {
       allowNull: false,
     },
     time: {
-      type: Sequelize.TIME,
+      type: Sequelize.INTEGER,
+      allowNull: false,
+    },
+    isPublished: {
+      type: Sequelize.BOOLEAN,
       allowNull: false,
     },
   });

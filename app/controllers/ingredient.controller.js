@@ -49,7 +49,7 @@ exports.findAll = (req, res) => {
       }
     : null;
 
-  Ingredient.findAll({ where: condition })
+  Ingredient.findAll({ where: condition, order: [["name", "ASC"]] })
     .then((data) => {
       res.send(data);
     })

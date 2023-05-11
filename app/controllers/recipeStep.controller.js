@@ -1,6 +1,6 @@
 const db = require("../models");
 const RecipeStep = db.recipeStep;
-const RecipeStepIngredient = db.recipeStepIngredient;
+const RecipeIngredient = db.recipeIngredient;
 const Ingredient = db.ingredient;
 const Op = db.Sequelize.Op;
 // Create and Save a new RecipeStep
@@ -10,7 +10,7 @@ exports.create = (req, res) => {
     const error = new Error("Step number cannot be empty for recipe step!");
     error.statusCode = 400;
     throw error;
-  } else if (req.body.description === undefined) {
+  } else if (req.body.instruction === undefined) {
     const error = new Error("Description cannot be empty for recipe step!");
     error.statusCode = 400;
     throw error;
@@ -23,7 +23,7 @@ exports.create = (req, res) => {
   // Create a RecipeStep
   const recipeStep = {
     stepNumber: req.body.stepNumber,
-    description: req.body.description,
+    instruction: req.body.instruction,
     recipeId: req.body.recipeId,
   };
   // Save RecipeStep in the database
@@ -88,18 +88,19 @@ exports.findAllForRecipeWithIngredients = (req, res) => {
     where: { recipeId: recipeId },
     include: [
       {
-        model: RecipeStepIngredient,
-        as: "recipeStepIngredients",
-        required: true,
+        model: RecipeIngredient,
+        as: "recipeIngredient",
+        required: false,
         include: [
           {
             model: Ingredient,
             as: "ingredient",
-            required: true,
+            required: false,
           },
         ],
       },
     ],
+    order: [["stepNumber", "ASC"]],
   })
     .then((data) => {
       res.send(data);
@@ -108,7 +109,7 @@ exports.findAllForRecipeWithIngredients = (req, res) => {
       res.status(500).send({
         message:
           err.message ||
-          "Some error occurred while retrieving recipeStepIngredients for a recipe step.",
+          "Some error occurred while retrieving recipeIngredients for a recipe step.",
       });
     });
 };
