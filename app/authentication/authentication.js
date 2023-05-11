@@ -9,7 +9,7 @@ const User = db.user;
  * If require is a string, enforces a specific type of authentication (credentials or token).
  * @return {{type: string, userId: string}}
  */
-authenticate = async (req, require = true) => {
+authenticate = async (req, res, require = true) => {
   let auth = req.get("authorization");
   console.log(auth);
   if (auth != null) {
@@ -33,11 +33,8 @@ authenticate = async (req, require = true) => {
       if (user != null) {
         let hash = await hashPassword(password, user.salt);
         if (Buffer.compare(user.password, hash) !== 0) {
-          throw Error(req, {
-            status: 401,
-            code: "invalid-password",
-            message: "Invalid password.",
-            data: email,
+          return res.status(401).send({
+            message: "Invalid password!",
           });
         }
         return {
@@ -45,11 +42,8 @@ authenticate = async (req, require = true) => {
           userId: user.id,
         };
       } else {
-        throw Error(req, {
-          status: 401,
-          code: "missing-user",
-          message: "User not found.",
-          data: username,
+        return res.status(401).send({
+          message: "User not found!",
         });
       }
     }
@@ -75,25 +69,19 @@ authenticate = async (req, require = true) => {
             sessionId: session.id,
           };
         } else {
-          throw Error(req, {
-            status: 401,
-            code: "expired-session",
-            message: "Session has expired",
+          return res.status(401).send({
+            message: "Session has expired.",
           });
         }
       } else {
-        throw Error(req, {
-          status: 401,
-          code: "invalid-session",
+        return res.status(401).send({
           message: "Invalid session",
         });
       }
     }
   }
   if (require) {
-    throw Error(req, {
-      status: 401,
-      code: "auth-required",
+    return res.status(401).send({
       message: "Authentication required",
     });
   }

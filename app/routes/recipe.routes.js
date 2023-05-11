@@ -1,6 +1,6 @@
 module.exports = (app) => {
   const Recipe = require("../controllers/recipe.controller.js");
-  // const { authenticate } = require("../authorization/authorization.js");
+  const { authenticateRoute } = require("../authentication/authentication");
   var router = require("express").Router();
 
   // Create a new Recipe
