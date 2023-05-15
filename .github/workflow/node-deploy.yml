@@ -1,4 +1,4 @@
-name: AWS DEPLOY TO STAGING
+name: AWS DEPLOY
 # turn off deploy to AWS
 
 on:
