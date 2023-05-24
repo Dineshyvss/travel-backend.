@@ -1,0 +1,58 @@
+name: AWS DEPLOY
+# turn off deploy to AWS
+
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - dev
+
+jobs:
+  aws-deploy:
+    runs-on: ubuntu-latest
+    env:
+      DB_HOST: ${{ secrets.AWS_DB_HOST }}
+      DB_PW: ${{ secrets.AWS_DB_PW}}
+      DB_USER: ${{ secrets.AWS_DB_USER }}
+      DB_NAME: ${{ secrets.AWS_DB_NAME }}
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: dev
+      - uses: actions/setup-node@v1
+      - run: npm install
+
+      - run: |
+          touch .env
+          echo DB_HOST = "$DB_HOST" >> .env
+          echo DB_PW = "$DB_PW" >> .env
+          echo DB_USER = "$DB_USER" >> .env
+          echo DB_NAME = "$DB_NAME" >> .env
+
+      - run: npm run bundle
+
+      - name: Deploy to Server
+        uses: easingthemes/ssh-deploy@v2.1.1
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_KEY }}
+          ARGS: "-rltgoDzvO --delete"
+          SOURCE: "deploy/"
+          REMOTE_HOST: "recipe.eaglesoftwareteam.com"
+          REMOTE_USER: ubuntu
+          TARGET: "nodeapps/recipe-backend"
+      - name: Execute SSH commmands on remote server
+        uses: JimCronqvist/action-ssh@master
+        env:
+          NAME: "Root"
+        with:
+          hosts: "ubuntu@tutorial.eaglesoftwareteam.com"
+          privateKey: ${{ secrets.SERVER_SSH_KEY }}
+          debug: false
+          command: |
+            cd nodeapps/recipe-backend
+            npm install
+            sudo systemctl stop recipe-backend
+            sudo cp recipe-backend.service /lib/systemd/system/recipe-backend.service
+            sudo systemctl daemon-reload
+            sudo systemctl start recipe-backend
