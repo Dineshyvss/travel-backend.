@@ -9,7 +9,7 @@ const db = require("./app/models");
 db.sequelize.sync();
 
 var corsOptions = {
-  origin: "http://localhost:8081",
+  origin: "http://ec2-54-234-254-60.compute-1.amazonaws.com/:8081",
 };
 
 app.use(cors(corsOptions));
